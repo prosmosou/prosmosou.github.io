@@ -6,10 +6,7 @@
 
 .dashbox {
   border: 1px dashed #43D967;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-radius: 5px;
   padding:20px;
   display: inline-block;
 }
@@ -23,17 +20,14 @@ body , html{
 }
 
 .box {
-  background-color: rgba(255, 255, 255, 50);
+  background-color: white;
   width:  350px;
   height: 600px;
   display: flex;
   justify-content: center;
   text-align:center;
   opacity: .95;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-radius: 30px;
 }
 
 @media screen and (max-width:800px) {
@@ -45,21 +39,16 @@ body , html{
   background-image: url("background.jpg");
   height: 100%;
   width: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   justify-content: center;
 }
 .signup_button {
   background: rgba(214, 9, 49, 1);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
   border-color: rgba(214, 9, 49, 1);
   border-style: solid;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  color: rgba(255, 255, 255, 1);
+  color: white;
   height: 27px;
   width: 187px;
 }
@@ -70,10 +59,7 @@ body , html{
 
 .email_input_area {
   border: 1px solid #dbdde0;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px;
   height: 27px;
   text-indent: 10px;
   width: 187px;
