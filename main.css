@@ -59,16 +59,6 @@ body , html{
   width: 187px;
 }
 
-.logo_div {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 231px;
-  opacity: 1;
-  overflow: hidden;
-  width: 191px;
-}
-
 .header_text {
   font-size: 36px;
 }
