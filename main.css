@@ -1,0 +1,85 @@
+* {
+  margin: 0px !important;
+  overflow-x: hidden;
+  padding: 0px 
+}
+
+.dashbox {
+  border: 1px dashed #43D967;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding:20px;
+  display: inline-block;
+}
+
+body , html{
+  background: rgba(255, 255, 255, 1);
+  height:100%;
+  font-family: Play;
+  font-size: 14px;
+  font-weight: Regular;
+}
+
+.box {
+  background-color: rgba(255, 255, 255, 50);
+  width:  350px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  text-align:center;
+  opacity: .95;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.main_wrapper {
+  padding-top:100px;
+  background-image: url("background.jpg");
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+}
+.signup_button {
+  background: rgba(214, 9, 49, 1);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-color: rgba(214, 9, 49, 1);
+  border-style: solid;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: rgba(255, 255, 255, 1);
+  height: 27px;
+  width: 187px;
+}
+
+.logo_div {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 231px;
+  opacity: 1;
+  overflow: hidden;
+  width: 191px;
+}
+
+.header_text {
+  font-size: 36px;
+}
+
+.email_input_area {
+  border: 1px solid #dbdde0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  height: 27px;
+  text-indent: 10px;
+  width: 187px;
+}
