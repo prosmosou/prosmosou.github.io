@@ -35,6 +35,11 @@ body , html{
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
 }
+
+@media screen and (max-width:800px) {
+  .main_wrapper {padding-top:20px !important;}
+}
+
 .main_wrapper {
   padding-top:100px;
   background-image: url("background.jpg");
