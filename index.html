@@ -476,7 +476,11 @@
                 const installers = await installersResponse.json();
                 const installersHtml = installers.length ? installers.map(script => `
                     <div class="script-item">
-                        <h3>${script.name}</h3>
+                        <h3>
+                            <a href="https://github.com/prosmosou/prosmosou.github.io/blob/main/${script.path}" target="_blank" style="color:#2563eb;text-decoration:none;">
+                                ${script.name}
+                            </a>
+                        </h3>
                         <p>${script.description}</p>
                         <div class="script-meta">
                             <span class="script-label">Usage:</span>
@@ -491,7 +495,11 @@
                 const tools = await toolsResponse.json();
                 const toolsHtml = tools.length ? tools.map(tool => `
                     <div class="script-item">
-                        <h3>${tool.name}</h3>
+                        <h3>
+                            <a href="https://github.com/prosmosou/prosmosou.github.io/blob/main/${tool.path}" target="_blank" style="color:#2563eb;text-decoration:none;">
+                                ${tool.name}
+                            </a>
+                        </h3>
                         <p>${tool.description}</p>
                         <div class="script-meta">
                             <span class="script-label">Usage:</span>
