@@ -1,0 +1,23 @@
+{
+    "name": "prosmosou.github.io",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3"
+        }
+    },
+    "forwardPorts": [80],
+    "postCreateCommand": "echo 'Welcome to Prosmosou Codespace!'",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "GitHub.copilot-chat"
+            ],
+            "settings": {}
+        }
+    },
+    "workspaceFolder": "/workspaces/prosmosou.github.io"
+}
