@@ -451,6 +451,10 @@
 
         // Load chains and install scripts from _generated files
         async function loadCommunity() {
+            // Show loading states
+            document.getElementById('chainsList').innerHTML = '<p>Loading chains...</p>';
+            document.getElementById('scriptsList').innerHTML = '<p>Loading install scripts...</p>';
+            document.getElementById('toolsList').innerHTML = '<p>Loading tools...</p>';
             try {
                 // Load and display chains
                 const chainsResponse = await fetch('/_generated/chains.json');
@@ -499,4 +503,13 @@
             } catch (error) {
                 console.error('Error loading community scripts:', error);
                 document.getElementById('chainsList').innerHTML = '<p>Error loading chains. Please try again later.</p>';
-                document.getElementById('scriptsList').innerHTML = '<p>Error loading installers. Please try
+                document.getElementById('scriptsList').innerHTML = '<p>Error loading installers. Please try again later.</p>';
+                document.getElementById('toolsList').innerHTML = '<p>Error loading tools. Please try again later.</p>';
+            }
+        }
+        window.onload = loadCommunity;
+        </script>
+    </footer>
+    </div>
+</body>
+</html>
