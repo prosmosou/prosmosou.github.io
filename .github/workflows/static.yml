@@ -15,29 +15,107 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Scripts List
+        run: |
+          echo "Generating scripts list..."
+          mkdir -p _generated
+          
+          # Function to extract metadata from scripts
+          extract_metadata() {
+            local file=$1
+            local type=$2
+            local name=$(basename "$file")
+            local desc=""
+            
+            # Try to extract description from file comments
+            if [[ -f "$file" ]]; then
+              desc=$(head -n 5 "$file" | grep -i "description:" | sed 's/.*description:\s*//i')
+              if [ -z "$desc" ]; then
+                desc=$(head -n 5 "$file" | grep "^#" | head -n 1 | sed 's/^#\s*//')
+              fi
+              if [ -z "$desc" ]; then
+                desc="$name"
+              fi
+            fi
+            
+            # Create JSON object
+            echo "{\"name\":\"$name\",\"description\":\"$desc\",\"type\":\"$type\",\"path\":\"$file\"}"
+          }
+          
+          # Initialize JSON arrays
+          echo "[" > _generated/tools.json
+          echo "[" > _generated/installers.json
+          echo "[" > _generated/chains.json
+          
+          # Process tools
+          first=true
+          for file in tools/*.sh; do
+            if [[ -f "$file" ]]; then
+              if [ "$first" = true ]; then
+                first=false
+              else
+                echo "," >> _generated/tools.json
+              fi
+              extract_metadata "$file" "tool" >> _generated/tools.json
+            fi
+          done
+          echo "]" >> _generated/tools.json
+          
+          # Process installers
+          first=true
+          for file in installers/*.sh; do
+            if [[ -f "$file" ]]; then
+              if [ "$first" = true ]; then
+                first=false
+              else
+                echo "," >> _generated/installers.json
+              fi
+              extract_metadata "$file" "installer" >> _generated/installers.json
+            fi
+          done
+          echo "]" >> _generated/installers.json
+          
+          # Process chains
+          first=true
+          for file in chains/*.json; do
+            if [[ -f "$file" ]]; then
+              if [ "$first" = true ]; then
+                first=false
+              else
+                echo "," >> _generated/chains.json
+              fi
+              cat "$file" >> _generated/chains.json
+            fi
+          done
+          echo "]" >> _generated/chains.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

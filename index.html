@@ -243,6 +243,59 @@
             flex: 1 1 350px;
             min-width: 320px;
         }
+        .script-item {
+            padding: 1em;
+            margin-bottom: 1em;
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .dark-mode .script-item {
+            background: #0f172a;
+            border-left-color: #38bdf8;
+        }
+        
+        .script-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 12px rgba(56,189,248,0.1);
+        }
+        
+        .script-item h3 {
+            margin: 0 0 0.5em 0;
+            color: #2563eb;
+            font-family: 'Fira Mono', monospace;
+        }
+        
+        .dark-mode .script-item h3 {
+            color: #38bdf8;
+        }
+        
+        .script-item p {
+            margin: 0 0 0.8em 0;
+            color: #4b5563;
+        }
+        
+        .dark-mode .script-item p {
+            color: #94a3b8;
+        }
+        
+        .script-meta {
+            font-size: 0.9em;
+            padding-top: 0.5em;
+            border-top: 1px solid rgba(56,189,248,0.1);
+        }
+        
+        .script-label {
+            color: #64748b;
+            margin-right: 0.5em;
+        }
+        
+        .dark-mode .script-label {
+            color: #94a3b8;
+        }
+
         @media (max-width: 700px) {
             main {
                 padding: 1rem;
@@ -259,6 +312,9 @@
                 left: 1rem;
                 top: 1rem;
                 font-size: 1em;
+            }
+            .script-item:hover {
+                transform: none;
             }
         }
     </style>
@@ -360,15 +416,6 @@
             </div>
         </section>
     </main>
-        .columns {
-            display: flex;
-            gap: 2.5rem;
-            flex-wrap: wrap;
-        }
-        .col {
-            flex: 1 1 350px;
-            min-width: 320px;
-        }
     <footer>
         &copy; 2025 Prosmosou. All rights reserved.
         <script>
@@ -402,50 +449,67 @@
             return false;
         }
 
-        // Load chains and install scripts from chains/ folder (stub: show example)
-        function loadCommunity() {
-            // Example chains
-            var chains = [
-                {
-                    name: "Linux Essentials",
-                    desc: "Basic setup for a fresh Linux system.",
-                    scripts: ["./install-cursor.sh", "./install-zsh.sh", "./install-docker.sh"]
-                },
-                {
-                    name: "No OS Starter",
-                    desc: "Setup for live USB and data drive.",
-                    scripts: ["./setup-liveusb.sh", "./link-data.sh"]
-                }
-            ];
-            var chainsHtml = '';
-            chains.forEach(chain => {
-                chainsHtml += `<div style='margin-bottom:1em;'><strong>${chain.name}</strong><br>${chain.desc}<br><em>Scripts:</em> <code>${chain.scripts.join(', ')}</code></div>`;
-            });
-            document.getElementById('chainsList').innerHTML = chainsHtml;
+        // Load chains and install scripts from _generated files
+        async function loadCommunity() {
+            try {
+                // Load and display chains
+                const chainsResponse = await fetch('/_generated/chains.json');
+                const chains = await chainsResponse.json();
+                const chainsHtml = chains.length ? chains.map(chain => `
+                    <div class="script-item">
+                        <h3>${chain.name}</h3>
+                        <p>${chain.description}</p>
+                        <div class="script-meta">
+                            <span class="script-label">Scripts:</span>
+                            <code>${Array.isArray(chain.scripts) ? chain.scripts.join(', ') : chain.scripts}</code>
+                        </div>
+                    </div>
+                `).join('') : '<p>No install chains available yet. Be the first to contribute!</p>';
+                document.getElementById('chainsList').innerHTML = chainsHtml;
 
-            // Example install scripts
-            var scripts = [
-                {
-                    name: "install-cursor.sh",
-                    desc: "Installs a custom cursor theme for Linux.",
-                    usage: "./install-cursor.sh"
-                },
-                {
-                    name: "install-zsh.sh",
-                    desc: "Sets up Zsh shell with Oh My Zsh.",
-                    usage: "./install-zsh.sh"
-                },
-                {
-                    name: "install-docker.sh",
-                    desc: "Installs Docker and Docker Compose.",
-                    usage: "./install-docker.sh"
+                // Load and display installers
+                const installersResponse = await fetch('/_generated/installers.json');
+                const installers = await installersResponse.json();
+                const installersHtml = installers.length ? installers.map(script => `
+                    <div class="script-item">
+                        <h3>${script.name}</h3>
+                        <p>${script.description}</p>
+                        <div class="script-meta">
+                            <span class="script-label">Usage:</span>
+                            <code>./${script.name}</code>
+                        </div>
+                    </div>
+                `).join('') : '<p>No installers available yet. Be the first to contribute!</p>';
+                document.getElementById('scriptsList').innerHTML = installersHtml;
+
+                // Load and display tools
+                const toolsResponse = await fetch('/_generated/tools.json');
+                const tools = await toolsResponse.json();
+                if (tools.length > 0) {
+                    const toolsSection = document.createElement('section');
+                    toolsSection.innerHTML = `
+                        <h2>Utility Tools</h2>
+                        <div class="feature" id="toolsList">
+                            ${tools.map(tool => `
+                                <div class="script-item">
+                                    <h3>${tool.name}</h3>
+                                    <p>${tool.description}</p>
+                                    <div class="script-meta">
+                                        <span class="script-label">Usage:</span>
+                                        <code>./${tool.name}</code>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    document.querySelector('.right').insertBefore(toolsSection, document.querySelector('.right').children[2]);
                 }
-            ];
-            var scriptsHtml = '';
-            scripts.forEach(script => {
-                scriptsHtml += `<div style='margin-bottom:1em;'><strong>${script.name}</strong><br>${script.desc}<br><em>Usage:</em> <code>${script.usage}</code></div>`;
-            });
-            document.getElementById('scriptsList').innerHTML = scriptsHtml;
+            } catch (error) {
+                console.error('Error loading community scripts:', error);
+                document.getElementById('chainsList').innerHTML = '<p>Error loading chains. Please try again later.</p>';
+                document.getElementById('scriptsList').innerHTML = '<p>Error loading installers. Please try again later.</p>';
+            }
+        }
         }
         window.onload = loadCommunity;
         </script>
