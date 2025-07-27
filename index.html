@@ -4,110 +4,343 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prosmosou Installer Scripts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+            font-family: 'Fira Mono', 'Roboto', Arial, sans-serif;
+            background: #fff;
             margin: 0;
             padding: 0;
             color: #222;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode body {
+            background: #18181b;
+            color: #e5e7eb;
         }
         header {
-            background: #6366f1;
-            color: #fff;
-            padding: 2rem 0 1rem 0;
+            background: #f8fafc;
+            color: #2563eb;
+            padding: 2.5rem 0 1.5rem 0;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(99,102,241,0.1);
+            box-shadow: 0 2px 16px rgba(56,189,248,0.08);
+            position: relative;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode header {
+            background: #0f172a;
+            color: #38bdf8;
+            box-shadow: 0 2px 16px rgba(56,189,248,0.12);
+        }
+        .github-link {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            z-index: 10;
+            text-decoration: none;
+            color: #2563eb;
+            font-family: 'Fira Mono', monospace;
+            font-size: 1.1rem;
+            background: #fff;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            padding: 0.4em 1em;
+            transition: background 0.2s, color 0.2s;
+        }
+        .github-link:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        .dark-mode .github-link {
+            color: #38bdf8;
+            background: #18181b;
+            border: 1px solid #38bdf8;
+        }
+        .dark-mode .github-link:hover {
+            background: #38bdf8;
+            color: #18181b;
+        }
+        .toggle-dark {
+            position: absolute;
+            left: 2rem;
+            top: 1.5rem;
+            z-index: 10;
+            background: #fff;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            padding: 0.4em 1em;
+            font-family: 'Fira Mono', monospace;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .toggle-dark:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        .dark-mode .toggle-dark {
+            background: #18181b;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+        }
+        .dark-mode .toggle-dark:hover {
+            background: #38bdf8;
+            color: #18181b;
         }
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px #2563eb22;
+            transition: color 0.3s;
+        }
+        .dark-mode header h1 {
+            text-shadow: 0 2px 8px #0ea5e9;
         }
         header p {
-            margin: 0.5rem 0 0 0;
-            font-size: 1.2rem;
+            margin: 0.7rem 0 0 0;
+            font-size: 1.3rem;
             font-weight: 400;
+            color: #64748b;
+            transition: color 0.3s;
+        }
+        .dark-mode header p {
+            color: #94a3b8;
         }
         main {
-            max-width: 800px;
-            margin: 2rem auto;
+            max-width: 900px;
+            margin: 2.5rem auto;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 24px rgba(99,102,241,0.08);
-            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 32px rgba(56,189,248,0.06);
+            padding: 2.5rem;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode main {
+            background: #23232a;
+            box-shadow: 0 4px 32px rgba(56,189,248,0.10);
+            color: #e5e7eb;
         }
         section {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
         h2 {
-            color: #6366f1;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            color: #2563eb;
+            font-size: 1.6rem;
+            margin-bottom: 0.7rem;
+            font-family: 'Fira Mono', monospace;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .dark-mode h2 {
+            color: #38bdf8;
         }
         code, pre {
             background: #f3f4f6;
             border-radius: 6px;
-            padding: 0.2em 0.5em;
+            padding: 0.2em 0.7em;
             font-size: 1em;
+            color: #2563eb;
+            font-family: 'Fira Mono', monospace;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode code, .dark-mode pre {
+            background: #18181b;
+            color: #38bdf8;
         }
         ul {
             padding-left: 1.5em;
         }
         .feature {
-            background: #eef2ff;
-            border-left: 4px solid #6366f1;
-            padding: 1em;
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 1.2em;
             margin-bottom: 1em;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(56,189,248,0.04);
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .dark-mode .feature {
+            background: #0f172a;
+            border-left: 4px solid #38bdf8;
+            box-shadow: 0 2px 12px rgba(56,189,248,0.07);
+        }
+        input, textarea, select, button {
+            font-family: 'Fira Mono', monospace;
+            background: #f3f4f6;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            margin-bottom: 0.5em;
+            padding: 0.5em;
+            font-size: 1em;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .dark-mode input, .dark-mode textarea, .dark-mode select, .dark-mode button {
+            background: #23232a;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+        .dark-mode input:focus, .dark-mode textarea:focus, .dark-mode select:focus {
+            border-color: #0ea5e9;
+        }
+        button {
+            background: #2563eb;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            box-shadow: 0 2px 8px #2563eb22;
+            transition: background 0.2s, color 0.2s;
+        }
+        button:hover {
+            background: #0ea5e9;
+            color: #fff;
+        }
+        .dark-mode button {
+            background: #38bdf8;
+            color: #18181b;
+            box-shadow: 0 2px 8px #0ea5e9;
+        }
+        .dark-mode button:hover {
+            background: #0ea5e9;
+            color: #fff;
+        }
+        .note {
+            margin-top: 1em;
+            color: #64748b;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+        .dark-mode .note {
+            color: #94a3b8;
         }
         footer {
             text-align: center;
-            padding: 1rem 0;
-            color: #888;
-            font-size: 0.9rem;
+            padding: 1.5rem 0 0.5rem 0;
+            color: #64748b;
+            font-size: 1rem;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
-        @media (max-width: 600px) {
+        .dark-mode footer {
+            background: #18181b;
+            color: #64748b;
+            border-top: 1px solid #23232a;
+        }
+        .columns {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .col {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
+        @media (max-width: 700px) {
             main {
                 padding: 1rem;
             }
             header h1 {
                 font-size: 2rem;
             }
+            .github-link {
+                right: 1rem;
+                top: 1rem;
+                font-size: 1em;
+            }
+            .toggle-dark {
+                left: 1rem;
+                top: 1rem;
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="themeRoot">
     <header>
+        <button class="toggle-dark" onclick="toggleDarkMode()" aria-label="Toggle dark mode">🌙</button>
+        <a class="github-link" href="https://github.com/prosmosou/prosmosou.github.io" target="_blank" title="View on GitHub">
+            <svg height="20" viewBox="0 0 16 16" width="20" style="vertical-align:middle;margin-right:6px;fill:currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.6-.18-3.29-.8-3.29-3.55 0-.78.28-1.42.74-1.92-.07-.18-.32-.91.07-1.9 0 0 .6-.19 1.97.73.57-.16 1.18-.24 1.79-.24.61 0 1.22.08 1.79.24 1.37-.92 1.97-.73 1.97-.73.39.99.14 1.72.07 1.9.46.5.74 1.14.74 1.92 0 2.76-1.69 3.37-3.3 3.55.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+            GitHub
+        </a>
         <h1>Prosmosou Installer Scripts</h1>
-        <p>Simple, reliable setup for any system — Linux, Windows, Mac, and beyond</p>
+        <p>Simple, reliable setup for any system — <span style="color:#0ea5e9">Linux</span>, <span style="color:#0ea5e9">Windows</span>, <span style="color:#0ea5e9">Mac</span>, and <span style="color:#0ea5e9">beyond</span></p>
     </header>
     <main>
-        <section>
-            <h2>What is Prosmosou?</h2>
-            <div class="feature">
-                <p>Prosmosou provides easy-to-use installer scripts for setting up your environment on any operating system. Whether you're on Linux, Windows, Mac, or our new "No OS" system, you can get started quickly and safely.</p>
+        <div class="columns">
+            <div class="col left">
+                <section>
+                    <h2>What is Prosmosou?</h2>
+                    <div class="feature">
+                        <p>Prosmosou provides easy-to-use installer scripts for setting up your environment on any operating system. Whether you're on Linux, Windows, Mac, or our new "No OS" system, you can get started quickly and safely.</p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Features</h2>
+                    <ul>
+                        <li>Supports <strong>all major operating systems</strong></li>
+                        <li>Easy customization and linking of installers</li>
+                        <li>"No OS" system: run your base OS from a live USB, keep your data on a separate drive</li>
+                        <li>One setup script for a clean, ready-to-go system every time you boot</li>
+                        <li>Safer and more reliable — prevents clutter and keeps your system fresh</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Quick Start Example</h2>
+                    <div class="feature">
+                        <p>To install a cursor theme on Linux, just run:</p>
+                        <pre><code>./install-cursor.sh</code></pre>
+                        <p>This will fetch the latest version, install it, and set up everything you need automatically.</p>
+                    </div>
+                </section>
             </div>
-        </section>
-        <section>
-            <h2>Quick Start Example</h2>
-            <div class="feature">
-                <p>To install a cursor theme on Linux, just run:</p>
-                <pre><code>./install-cursor.sh</code></pre>
-                <p>This will fetch the latest version, install it, and set up everything you need automatically.</p>
+            <div class="col right">
+                <section>
+                    <h2>Create Your Install Chain or Installer</h2>
+                    <div class="feature">
+                        <form id="chainForm" onsubmit="return preparePR();">
+                            <label for="chainType"><strong>Type:</strong></label><br>
+                            <select id="chainType" name="chainType" style="width:100%;margin-bottom:8px;">
+                                <option value="chain">Install Chain</option>
+                                <option value="installer">Installer Script</option>
+                            </select><br>
+                            <label for="chainName"><strong>Name:</strong></label><br>
+                            <input type="text" id="chainName" name="chainName" required style="width:100%;margin-bottom:8px;"><br>
+                            <label for="chainDesc"><strong>Description:</strong></label><br>
+                            <textarea id="chainDesc" name="chainDesc" rows="2" required style="width:100%;margin-bottom:8px;"></textarea><br>
+                            <label for="chainScripts"><strong>Install Scripts (one per line):</strong></label><br>
+                            <textarea id="chainScripts" name="chainScripts" rows="3" required style="width:100%;margin-bottom:8px;"></textarea><br>
+                            <button type="submit" style="background:#6366f1;color:#fff;padding:0.5em 1.5em;border:none;border-radius:6px;font-size:1em;cursor:pointer;">Prepare Pull Request</button>
+                        </form>
+                        <div id="submitResult" style="margin-top:1em;"></div>
+                        <div id="issueOption" style="margin-top:1.5em;"></div>
+                        <div class="note">
+                            <strong>Note:</strong> Please add your <span style="color:#38bdf8">Install Chain</span> to the <code>chains/</code> folder and your <span style="color:#38bdf8">Installer Script</span> to the <code>installers/</code> folder in your fork before creating a pull request.
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Community Install Chains</h2>
+                    <div class="feature" id="chainsList">
+                        <p>Loading chains...</p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Community Install Scripts</h2>
+                    <div class="feature" id="scriptsList">
+                        <p>Loading install scripts...</p>
+                    </div>
+                </section>
             </div>
-        </section>
-        <section>
-            <h2>Features</h2>
-            <ul>
-                <li>Supports <strong>all major operating systems</strong></li>
-                <li>Easy customization and linking of installers</li>
-                <li>"No OS" system: run your base OS from a live USB, keep your data on a separate drive</li>
-                <li>One setup script for a clean, ready-to-go system every time you boot</li>
-                <li>Safer and more reliable — prevents clutter and keeps your system fresh</li>
-            </ul>
-        </section>
+        </div>
         <section>
             <h2>How the "No OS" System Works</h2>
             <div class="feature">
@@ -127,8 +360,95 @@
             </div>
         </section>
     </main>
+        .columns {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .col {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
     <footer>
         &copy; 2025 Prosmosou. All rights reserved.
+        <script>
+        // Prepare PR: create downloadable file and guide user to fork and PR
+        function preparePR() {
+            var type = document.getElementById('chainType').value;
+            var name = document.getElementById('chainName').value;
+            var desc = document.getElementById('chainDesc').value;
+            var scripts = document.getElementById('chainScripts').value.split('\n').filter(s => s.trim());
+            var filename = type === 'chain' ? `chain-${name.replace(/\s+/g,'_').toLowerCase()}.json` : `installer-${name.replace(/\s+/g,'_').toLowerCase()}.json`;
+            var folder = type === 'chain' ? 'chains' : 'installers';
+            var content = JSON.stringify({
+                type: type,
+                name: name,
+                description: desc,
+                scripts: scripts
+            }, null, 2);
+            var blob = new Blob([content], {type: 'application/json'});
+            var url = URL.createObjectURL(blob);
+            var prDesc = encodeURIComponent(`### ${type === 'chain' ? 'Install Chain' : 'Installer'} Submission\n\n**Name:** ${name}\n**Description:** ${desc}\n**Scripts:**\n${scripts.map(s=>'- '+s).join('\n')}`);
+            var forkUrl = `https://github.com/prosmosou/prosmosou.github.io/fork`;
+            var prGuide = `1. <a href='${url}' download='${filename}' style='color:#6366f1;font-weight:bold;'>Download your ${type === 'chain' ? 'chain' : 'installer'} file</a><br>2. <a href='${forkUrl}' target='_blank' style='color:#6366f1;font-weight:bold;'>Fork the repository</a><br>3. Add your file to the <code>${folder}/</code> folder in your fork<br>4. <a href='https://github.com/prosmosou/prosmosou.github.io/compare' target='_blank' style='color:#6366f1;font-weight:bold;'>Create a Pull Request</a> and paste the following description:<br><textarea readonly style='width:100%;height:6em;'>${decodeURIComponent(prDesc)}</textarea>`;
+            document.getElementById('submitResult').innerHTML = prGuide;
+
+            // Issue option for users who don't want to fork
+            var issueBody = encodeURIComponent(`**Type:** ${type}\n**Name:** ${name}\n**Description:** ${desc}\n**Scripts:**\n${scripts.map(s=>'- '+s).join('\n')}`);
+            var issueUrl = `https://github.com/prosmosou/prosmosou.github.io/issues/new?title=${encodeURIComponent(type === 'chain' ? 'Install Chain: ' : 'Installer: ') + encodeURIComponent(name)}&body=${issueBody}`;
+            var issueHtml = `<div class='note'><strong>Don't want to fork?</strong> <a href='${issueUrl}' target='_blank' style='color:#38bdf8;font-weight:bold;'>Submit as a GitHub Issue instead</a>.</div>`;
+            document.getElementById('issueOption').innerHTML = issueHtml;
+
+            return false;
+        }
+
+        // Load chains and install scripts from chains/ folder (stub: show example)
+        function loadCommunity() {
+            // Example chains
+            var chains = [
+                {
+                    name: "Linux Essentials",
+                    desc: "Basic setup for a fresh Linux system.",
+                    scripts: ["./install-cursor.sh", "./install-zsh.sh", "./install-docker.sh"]
+                },
+                {
+                    name: "No OS Starter",
+                    desc: "Setup for live USB and data drive.",
+                    scripts: ["./setup-liveusb.sh", "./link-data.sh"]
+                }
+            ];
+            var chainsHtml = '';
+            chains.forEach(chain => {
+                chainsHtml += `<div style='margin-bottom:1em;'><strong>${chain.name}</strong><br>${chain.desc}<br><em>Scripts:</em> <code>${chain.scripts.join(', ')}</code></div>`;
+            });
+            document.getElementById('chainsList').innerHTML = chainsHtml;
+
+            // Example install scripts
+            var scripts = [
+                {
+                    name: "install-cursor.sh",
+                    desc: "Installs a custom cursor theme for Linux.",
+                    usage: "./install-cursor.sh"
+                },
+                {
+                    name: "install-zsh.sh",
+                    desc: "Sets up Zsh shell with Oh My Zsh.",
+                    usage: "./install-zsh.sh"
+                },
+                {
+                    name: "install-docker.sh",
+                    desc: "Installs Docker and Docker Compose.",
+                    usage: "./install-docker.sh"
+                }
+            ];
+            var scriptsHtml = '';
+            scripts.forEach(script => {
+                scriptsHtml += `<div style='margin-bottom:1em;'><strong>${script.name}</strong><br>${script.desc}<br><em>Usage:</em> <code>${script.usage}</code></div>`;
+            });
+            document.getElementById('scriptsList').innerHTML = scriptsHtml;
+        }
+        window.onload = loadCommunity;
+        </script>
     </footer>
 </body>
 </html>
