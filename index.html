@@ -384,6 +384,12 @@
                     </div>
                 </section>
                 <section>
+                    <h2>Community Tools</h2>
+                    <div class="feature" id="toolsList">
+                        <p>Loading tools...</p>
+                    </div>
+                </section>
+                <section>
                     <h2>Community Install Chains</h2>
                     <div class="feature" id="chainsList">
                         <p>Loading chains...</p>
@@ -485,34 +491,18 @@
                 // Load and display tools
                 const toolsResponse = await fetch('/_generated/tools.json');
                 const tools = await toolsResponse.json();
-                if (tools.length > 0) {
-                    const toolsSection = document.createElement('section');
-                    toolsSection.innerHTML = `
-                        <h2>Utility Tools</h2>
-                        <div class="feature" id="toolsList">
-                            ${tools.map(tool => `
-                                <div class="script-item">
-                                    <h3>${tool.name}</h3>
-                                    <p>${tool.description}</p>
-                                    <div class="script-meta">
-                                        <span class="script-label">Usage:</span>
-                                        <code>./${tool.name}</code>
-                                    </div>
-                                </div>
-                            `).join('')}
+                const toolsHtml = tools.length ? tools.map(tool => `
+                    <div class="script-item">
+                        <h3>${tool.name}</h3>
+                        <p>${tool.description}</p>
+                        <div class="script-meta">
+                            <span class="script-label">Usage:</span>
+                            <code>./${tool.name}</code>
                         </div>
-                    `;
-                    document.querySelector('.right').insertBefore(toolsSection, document.querySelector('.right').children[2]);
-                }
+                    </div>
+                `).join('') : '<p>No tools available yet. Be the first to contribute!</p>';
+                document.getElementById('toolsList').innerHTML = toolsHtml;
             } catch (error) {
                 console.error('Error loading community scripts:', error);
                 document.getElementById('chainsList').innerHTML = '<p>Error loading chains. Please try again later.</p>';
-                document.getElementById('scriptsList').innerHTML = '<p>Error loading installers. Please try again later.</p>';
-            }
-        }
-        }
-        window.onload = loadCommunity;
-        </script>
-    </footer>
-</body>
-</html>
+                document.getElementById('scriptsList').innerHTML = '<p>Error loading installers. Please try
