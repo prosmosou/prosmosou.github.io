@@ -17,13 +17,39 @@
         .copy-btn:hover { background: #0ea5e9; }
         a { color: #2563eb; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .dark-mode { background: #121212; color: #e0e0e0; }
+        .dark-mode h1 { color: #bb86fc; }
+        .dark-mode .chain-item { background: #1e1e2e; border-left-color: #bb86fc; }
+        .dark-mode .breadcrumbs a { color: #bb86fc; }
+        .dark-mode .copy-btn { background: #bb86fc; color: #121212; }
+        .dark-mode .copy-btn:hover { background: #9b59b6; }
     </style>
 </head>
 <body>
+    <button id="toggle-dark" style="position:fixed;top:1em;right:1em;z-index:1000;background:#fff;color:#2563eb;border:1px solid #2563eb;border-radius:6px;padding:0.4em 1em;font-family:'Fira Mono',monospace;font-size:1.1rem;cursor:pointer;">🌙</button>
     <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Install Chains</div>
     <h1>All Community Install Chains</h1>
     <div id="chainsList">Loading chains...</div>
+    <footer style="margin-top:3em;text-align:center;color:#64748b;font-size:1em;">
+        <a href="https://github.com/codespaces" target="_blank" style="color:#2563eb;font-weight:bold;">Open in GitHub Codespaces</a>
+    </footer>
     <script>
+    function setDarkMode(enabled) {
+        if (enabled) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', '1');
+            document.getElementById('toggle-dark').textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', '0');
+            document.getElementById('toggle-dark').textContent = '🌙';
+        }
+    }
+    document.getElementById('toggle-dark').onclick = function() {
+        setDarkMode(!document.body.classList.contains('dark-mode'));
+    };
+    setDarkMode(localStorage.getItem('darkMode') === '1');
+
     function copyToClipboard(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
             btn.textContent = 'Copied!';

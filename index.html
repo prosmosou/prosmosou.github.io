@@ -322,7 +322,7 @@
 <body>
     <div id="themeRoot">
     <header>
-        <button class="toggle-dark" onclick="toggleDarkMode()" aria-label="Toggle dark mode">🌙</button>
+        <button class="toggle-dark" id="toggle-dark" aria-label="Toggle dark mode">🌙</button>
         <a class="github-link" href="https://github.com/prosmosou/prosmosou.github.io" target="_blank" title="View on GitHub">
             <svg height="20" viewBox="0 0 16 16" width="20" style="vertical-align:middle;margin-right:6px;fill:currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.6-.18-3.29-.8-3.29-3.55 0-.78.28-1.42.74-1.92-.07-.18-.32-.91.07-1.9 0 0 .6-.19 1.97.73.57-.16 1.18-.24 1.79-.24.61 0 1.22.08 1.79.24 1.37-.92 1.97-.73 1.97-.73.39.99.14 1.72.07 1.9.46.5.74 1.14.74 1.92 0 2.76-1.69 3.37-3.3 3.55.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
             GitHub
@@ -417,8 +417,26 @@
         </section>
     </main>
     <footer>
-        &copy; 2025 Prosmosou. All rights reserved.
+        &copy; 2025 Prosmosou. All rights reserved.<br>
+        <a href="https://github.com/codespaces" target="_blank" style="color:#2563eb;font-weight:bold;">Open in GitHub Codespaces</a>
         <script>
+        // Dark mode toggle with localStorage persistence
+        function setDarkMode(enabled) {
+            if (enabled) {
+                document.documentElement.classList.add('dark-mode');
+                localStorage.setItem('darkMode', '1');
+                document.getElementById('toggle-dark').textContent = '☀️';
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', '0');
+                document.getElementById('toggle-dark').textContent = '🌙';
+            }
+        }
+        document.getElementById('toggle-dark').onclick = function() {
+            setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+        };
+        setDarkMode(localStorage.getItem('darkMode') === '1');
+
         // Prepare PR: create downloadable file and guide user to fork and PR
         function preparePR() {
             var type = document.getElementById('chainType').value;

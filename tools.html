@@ -17,13 +17,42 @@
         .copy-btn:hover { background: #0ea5e9; }
         a { color: #2563eb; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        /* Dark mode styles */
+        body.dark-mode { background: #121212; color: #e0e0e0; }
+        h1.dark-mode { color: #bb86fc; }
+        .tool-item.dark-mode { background: #1e1e1e; border-left-color: #bb86fc; }
+        .bash-shortcut.dark-mode { background: #292929; color: #03dac6; }
+        .copy-btn.dark-mode { background: #bb86fc; color: #121212; }
+        /* Transition for smooth mode change */
+        body, h1, .tool-item, .bash-shortcut, .copy-btn { transition: background-color 0.3s, color 0.3s; }
     </style>
 </head>
 <body>
+    <button id="toggle-dark" style="position:fixed;top:1em;right:1em;z-index:1000;background:#fff;color:#2563eb;border:1px solid #2563eb;border-radius:6px;padding:0.4em 1em;font-family:'Fira Mono',monospace;font-size:1.1rem;cursor:pointer;">🌙</button>
     <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Tools</div>
     <h1>All Community Tools</h1>
     <div id="toolsList">Loading tools...</div>
+    <footer style="margin-top:3em;text-align:center;color:#64748b;font-size:1em;">
+        
+    </footer>
     <script>
+    function setDarkMode(enabled) {
+        if (enabled) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', '1');
+            document.getElementById('toggle-dark').textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', '0');
+            document.getElementById('toggle-dark').textContent = '🌙';
+        }
+    }
+    document.getElementById('toggle-dark').onclick = function() {
+        setDarkMode(!document.body.classList.contains('dark-mode'));
+    };
+    // On load, set mode from localStorage
+    setDarkMode(localStorage.getItem('darkMode') === '1');
+
     function copyToClipboard(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
             btn.textContent = 'Copied!';
