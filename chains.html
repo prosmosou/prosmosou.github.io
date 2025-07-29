@@ -7,21 +7,33 @@
     <style>
         body { font-family: 'Fira Mono', monospace; background: #fff; color: #222; margin: 0; padding: 2em; }
         h1 { color: #2563eb; }
+        .breadcrumbs { margin-bottom: 2em; font-size: 1em; }
+        .breadcrumbs a { color: #2563eb; text-decoration: none; }
+        .breadcrumbs a:hover { text-decoration: underline; }
         .chain-item { background: #f8fafc; border-left: 4px solid #2563eb; border-radius: 10px; margin-bottom: 1.5em; padding: 1em; }
         .chain-meta { font-size: 0.95em; margin-top: 0.5em; }
-        .bash-shortcut { background: #23232a; color: #38bdf8; padding: 0.5em 1em; border-radius: 6px; font-size: 1em; display: inline-block; margin-top: 0.5em; }
+        .bash-shortcut { background: #23232a; color: #38bdf8; padding: 0.5em 1em; border-radius: 6px; font-size: 1em; display: inline-block; margin-top: 0.5em; position: relative; }
+        .copy-btn { margin-left: 1em; background: #2563eb; color: #fff; border: none; border-radius: 4px; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.95em; }
+        .copy-btn:hover { background: #0ea5e9; }
         a { color: #2563eb; text-decoration: none; }
         a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
+    <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Install Chains</div>
     <h1>All Community Install Chains</h1>
     <div id="chainsList">Loading chains...</div>
     <script>
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 1200);
+        });
+    }
     async function loadChains() {
         const res = await fetch('/_generated/chains.json');
         const chains = await res.json();
-        const html = chains.length ? chains.map(chain => {
+        const html = chains.length ? chains.map((chain, i) => {
             let scripts = Array.isArray(chain.scripts) ? chain.scripts : [];
             let scriptLinks = scripts.map(s => `<li><code>${s}</code></li>`).join('');
             let bashShortcut = scripts.length ? `bash -c '${scripts.map(s => `curl -sSL https://raw.githubusercontent.com/prosmosou/prosmosou.github.io/main/${s.replace('./','')}`).join(' && ')} | bash'` : '';
@@ -29,7 +41,9 @@
                 <h2>${chain.name}</h2>
                 <div class="chain-meta">${chain.description}</div>
                 <div><strong>Scripts:</strong><ul>${scriptLinks}</ul></div>
-                ${bashShortcut ? `<div class="bash-shortcut">${bashShortcut}</div>` : ''}
+                ${bashShortcut ? `<div class="bash-shortcut" id="cmd${i}">${bashShortcut}
+                    <button class="copy-btn" onclick="copyToClipboard('${bashShortcut.replace(/'/g,"&#39;")}', this)">Copy</button>
+                </div>` : ''}
             </div>`;
         }).join('') : '<p>No install chains found.</p>';
         document.getElementById('chainsList').innerHTML = html;

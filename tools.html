@@ -7,27 +7,42 @@
     <style>
         body { font-family: 'Fira Mono', monospace; background: #fff; color: #222; margin: 0; padding: 2em; }
         h1 { color: #2563eb; }
+        .breadcrumbs { margin-bottom: 2em; font-size: 1em; }
+        .breadcrumbs a { color: #2563eb; text-decoration: none; }
+        .breadcrumbs a:hover { text-decoration: underline; }
         .tool-item { background: #f8fafc; border-left: 4px solid #2563eb; border-radius: 10px; margin-bottom: 1.5em; padding: 1em; }
         .tool-meta { font-size: 0.95em; margin-top: 0.5em; }
-        .bash-shortcut { background: #23232a; color: #38bdf8; padding: 0.5em 1em; border-radius: 6px; font-size: 1em; display: inline-block; margin-top: 0.5em; }
+        .bash-shortcut { background: #23232a; color: #38bdf8; padding: 0.5em 1em; border-radius: 6px; font-size: 1em; display: inline-block; margin-top: 0.5em; position: relative; }
+        .copy-btn { margin-left: 1em; background: #2563eb; color: #fff; border: none; border-radius: 4px; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.95em; }
+        .copy-btn:hover { background: #0ea5e9; }
         a { color: #2563eb; text-decoration: none; }
         a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
+    <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Tools</div>
     <h1>All Community Tools</h1>
     <div id="toolsList">Loading tools...</div>
     <script>
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 1200);
+        });
+    }
     async function loadTools() {
         const res = await fetch('/_generated/tools.json');
         const tools = await res.json();
-        const html = tools.length ? tools.map(tool => `
-            <div class="tool-item">
+        const html = tools.length ? tools.map((tool, i) => {
+            const cmd = `curl -sSL https://raw.githubusercontent.com/prosmosou/prosmosou.github.io/main/${tool.path} | bash`;
+            return `<div class="tool-item">
                 <h2><a href="https://github.com/prosmosou/prosmosou.github.io/blob/main/${tool.path}" target="_blank">${tool.name}</a></h2>
                 <div class="tool-meta">${tool.description}</div>
-                <div class="bash-shortcut">curl -sSL https://raw.githubusercontent.com/prosmosou/prosmosou.github.io/main/${tool.path} | bash</div>
-            </div>
-        `).join('') : '<p>No tools found.</p>';
+                <div class="bash-shortcut" id="cmd${i}">${cmd}
+                    <button class="copy-btn" onclick="copyToClipboard('${cmd.replace(/'/g,"&#39;")}', this)">Copy</button>
+                </div>
+            </div>`;
+        }).join('') : '<p>No tools found.</p>';
         document.getElementById('toolsList').innerHTML = html;
     }
     loadTools();
